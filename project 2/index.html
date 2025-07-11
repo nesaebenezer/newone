@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crime Pattern Detection System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-search"></i>
+                    <h1>Crime Pattern Detection System</h1>
+                </div>
+                <div class="header-info">
+                    <span class="project-tag">CSE Internship Project</span>
+                    <div class="status">
+                        <i class="fas fa-circle status-online"></i>
+                        <span>System Active</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="nav-link active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a></li>
+                <li><a href="#crime-types" class="nav-link" data-page="crime-types">
+                    <i class="fas fa-chart-bar"></i> Crime Types
+                </a></li>
+                <li><a href="#hotspots" class="nav-link" data-page="hotspots">
+                    <i class="fas fa-map-marker-alt"></i> Hotspots
+                </a></li>
+                <li><a href="#time-patterns" class="nav-link" data-page="time-patterns">
+                    <i class="fas fa-clock"></i> Time Patterns
+                </a></li>
+                <li><a href="#clusters" class="nav-link" data-page="clusters">
+                    <i class="fas fa-project-diagram"></i> Clusters
+                </a></li>
+                <li><a href="#search" class="nav-link" data-page="search">
+                    <i class="fas fa-search"></i> Search
+                </a></li>
+                <li><a href="#reports" class="nav-link" data-page="reports">
+                    <i class="fas fa-file-alt"></i> Reports
+                </a></li>
+            </ul>
+            
+            <!-- System Status -->
+            <div class="system-status">
+                <h4>System Status</h4>
+                <div class="status-item">
+                    <i class="fas fa-circle text-green"></i>
+                    <span>Data Loaded: <strong id="total-records">40</strong> records</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-circle text-green"></i>
+                    <span>Analysis: Complete</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-circle text-green"></i>
+                    <span>Last Update: Just now</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Page -->
+            <div id="dashboard" class="page active">
+                <div class="page-header">
+                    <h2>Crime Analysis Dashboard</h2>
+                    <p>Comprehensive overview of crime patterns and trends</p>
+                </div>
+
+                <!-- Key Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card blue">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Total Crimes</h3>
+                                <div class="metric-value" id="total-crimes">40</div>
+                                <div class="metric-trend negative">↘ 12% vs last period</div>
+                            </div>
+                            <i class="fas fa-exclamation-triangle metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card green">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Crime Types</h3>
+                                <div class="metric-value" id="unique-types">5</div>
+                            </div>
+                            <i class="fas fa-chart-bar metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card yellow">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Active Locations</h3>
+                                <div class="metric-value" id="unique-locations">5</div>
+                            </div>
+                            <i class="fas fa-map-marker-alt metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card red">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>High-Risk Periods</h3>
+                                <div class="metric-value">3</div>
+                                <div class="metric-trend positive">↗ 8% increase</div>
+                            </div>
+                            <i class="fas fa-clock metric-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Insights -->
+                <div class="card">
+                    <h3>Quick Insights</h3>
+                    <div class="insights-grid">
+                        <div class="insight-item blue">
+                            <div class="insight-value" id="most-common-crime">Theft</div>
+                            <div class="insight-label">Most Common Crime</div>
+                        </div>
+                        <div class="insight-item red">
+                            <div class="insight-value" id="top-hotspot">Downtown</div>
+                            <div class="insight-label">Top Hotspot</div>
+                        </div>
+                        <div class="insight-item yellow">
+                            <div class="insight-value">Evening</div>
+                            <div class="insight-label">Peak Crime Time</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-grid">
+                    <div class="card">
+                        <h3>Crime Type Distribution</h3>
+                        <canvas id="crimeTypesChart" width="400" height="300"></canvas>
+                    </div>
+                    <div class="card">
+                        <h3>Location Breakdown</h3>
+                        <canvas id="locationsChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-list" id="recent-activity">
+                        <!-- Activity items will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crime Types Page -->
+            <div id="crime-types" class="page">
+                <div class="page-header">
+                    <h2>Crime Type Analysis</h2>
+                    <p>Detailed breakdown of crime categories and patterns</p>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="metrics-grid">
+                    <div class="metric-card blue">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Most Frequent</h3>
+                                <div class="metric-value">Theft</div>
+                                <div class="metric-trend">32.4% of all crimes</div>
+                            </div>
+                            <i class="fas fa-chart-bar metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card red">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Highest Severity</h3>
+                                <div class="metric-value">Burglary</div>
+                                <div class="metric-trend">High risk category</div>
+                            </div>
+                            <i class="fas fa-exclamation-triangle metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card green">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Trending Up</h3>
+                                <div class="metric-value">Theft</div>
+                                <div class="metric-trend positive">+15% increase</div>
+                            </div>
+                            <i class="fas fa-trending-up metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card yellow">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Total Categories</h3>
+                                <div class="metric-value">7</div>
+                                <div class="metric-trend">Active crime types</div>
+                            </div>
+                            <i class="fas fa-list metric-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Crime Types Chart -->
+                <div class="card">
+                    <h3>Crime Type Frequency Distribution</h3>
+                    <canvas id="crimeTypesDetailChart" width="800" height="400"></canvas>
+                </div>
+
+                <!-- Crime Types Table -->
+                <div class="card">
+                    <h3>Detailed Crime Type Analysis</h3>
+                    <div class="table-container">
+                        <table id="crime-types-table">
+                            <thead>
+                                <tr>
+                                    <th>Crime Type</th>
+                                    <th>Count</th>
+                                    <th>Percentage</th>
+                                    <th>Trend</th>
+                                    <th>Severity</th>
+                                    <th>Peak Hours</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotspots Page -->
+            <div id="hotspots" class="page">
+                <div class="page-header">
+                    <h2>Crime Hotspot Analysis</h2>
+                    <p>Geographic distribution and location-based crime patterns</p>
+                </div>
+
+                <!-- Hotspot Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card red">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Highest Risk</h3>
+                                <div class="metric-value">Downtown</div>
+                                <div class="metric-trend">8 incidents</div>
+                            </div>
+                            <i class="fas fa-exclamation-triangle metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card blue">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Total Locations</h3>
+                                <div class="metric-value">5</div>
+                                <div class="metric-trend">Active areas</div>
+                            </div>
+                            <i class="fas fa-map-marker-alt metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card yellow">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Trending Up</h3>
+                                <div class="metric-value">Park District</div>
+                                <div class="metric-trend positive">+20% increase</div>
+                            </div>
+                            <i class="fas fa-trending-up metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card green">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Population Covered</h3>
+                                <div class="metric-value">65K</div>
+                                <div class="metric-trend">Total residents</div>
+                            </div>
+                            <i class="fas fa-users metric-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotspots Chart -->
+                <div class="card">
+                    <h3>Crime Distribution by Location</h3>
+                    <canvas id="hotspotsChart" width="800" height="400"></canvas>
+                </div>
+
+                <!-- Location Details -->
+                <div class="card">
+                    <h3>Detailed Location Analysis</h3>
+                    <div id="location-details" class="location-grid">
+                        <!-- Location cards will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Patterns Page -->
+            <div id="time-patterns" class="page">
+                <div class="page-header">
+                    <h2>Time Pattern Analysis</h2>
+                    <p>Temporal crime distribution and timing insights</p>
+                </div>
+
+                <!-- Time Period Cards -->
+                <div class="metrics-grid">
+                    <div class="metric-card red">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Peak Hours</h3>
+                                <div class="metric-value">18:00-22:00</div>
+                                <div class="metric-trend">8 crimes</div>
+                            </div>
+                            <i class="fas fa-sun metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card green">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Safest Hours</h3>
+                                <div class="metric-value">04:00-08:00</div>
+                                <div class="metric-trend">2 crimes</div>
+                            </div>
+                            <i class="fas fa-moon metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card yellow">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Day Activity</h3>
+                                <div class="metric-value">12:00-18:00</div>
+                                <div class="metric-trend">10 crimes</div>
+                            </div>
+                            <i class="fas fa-sun metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card purple">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Night Activity</h3>
+                                <div class="metric-value">00:00-06:00</div>
+                                <div class="metric-trend">12 crimes</div>
+                            </div>
+                            <i class="fas fa-moon metric-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time Pattern Chart -->
+                <div class="card">
+                    <h3>24-Hour Crime Distribution</h3>
+                    <canvas id="timePatternsChart" width="800" height="400"></canvas>
+                </div>
+
+                <!-- Time Analysis -->
+                <div class="charts-grid">
+                    <div class="card">
+                        <h3>Peak Hours Analysis</h3>
+                        <div class="time-analysis">
+                            <div class="time-period high-activity">
+                                <h4>High Activity Period</h4>
+                                <p><strong>18:00 - 22:00</strong></p>
+                                <div class="period-stats">
+                                    <span class="stat">8 crimes</span>
+                                    <span class="stat">20% of daily total</span>
+                                </div>
+                            </div>
+                            <div class="time-period moderate-activity">
+                                <h4>Moderate Activity</h4>
+                                <p><strong>12:00 - 18:00</strong></p>
+                                <div class="period-stats">
+                                    <span class="stat">10 crimes</span>
+                                    <span class="stat">25% of daily total</span>
+                                </div>
+                            </div>
+                            <div class="time-period low-activity">
+                                <h4>Low Activity Period</h4>
+                                <p><strong>04:00 - 08:00</strong></p>
+                                <div class="period-stats">
+                                    <span class="stat">2 crimes</span>
+                                    <span class="stat">5% of daily total</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>Crime Types by Time Period</h3>
+                        <div class="time-crimes">
+                            <div class="time-crime-item">
+                                <h4>Morning (06:00 - 12:00)</h4>
+                                <p>Primary: Theft, Vandalism</p>
+                                <small>Business hours, commuter activity</small>
+                            </div>
+                            <div class="time-crime-item">
+                                <h4>Afternoon (12:00 - 18:00)</h4>
+                                <p>Primary: Theft, Fraud</p>
+                                <small>Shopping hours, high foot traffic</small>
+                            </div>
+                            <div class="time-crime-item">
+                                <h4>Evening (18:00 - 24:00)</h4>
+                                <p>Primary: Assault, Theft</p>
+                                <small>Entertainment district activity</small>
+                            </div>
+                            <div class="time-crime-item">
+                                <h4>Night (00:00 - 06:00)</h4>
+                                <p>Primary: Burglary, Vandalism</p>
+                                <small>Reduced surveillance, fewer witnesses</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clusters Page -->
+            <div id="clusters" class="page">
+                <div class="page-header">
+                    <h2>Crime Cluster Analysis</h2>
+                    <p>Temporal clustering and high-activity period detection</p>
+                </div>
+
+                <!-- Cluster Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card red">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Active Clusters</h3>
+                                <div class="metric-value">2</div>
+                                <div class="metric-trend">High activity periods</div>
+                            </div>
+                            <i class="fas fa-exclamation-triangle metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card blue">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Peak Cluster</h3>
+                                <div class="metric-value">20</div>
+                                <div class="metric-trend">crimes in 7 days</div>
+                            </div>
+                            <i class="fas fa-trending-up metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card yellow">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Average Window</h3>
+                                <div class="metric-value">14.6</div>
+                                <div class="metric-trend">crimes per period</div>
+                            </div>
+                            <i class="fas fa-chart-line metric-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="metric-card green">
+                        <div class="metric-content">
+                            <div class="metric-info">
+                                <h3>Detection Rate</h3>
+                                <div class="metric-value">80%</div>
+                                <div class="metric-trend">clusters identified</div>
+                            </div>
+                            <i class="fas fa-calendar metric-icon"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clusters Chart -->
+                <div class="card">
+                    <h3>Crime Clusters (7-day sliding window)</h3>
+                    <canvas id="clustersChart" width="800" height="400"></canvas>
+                </div>
+
+                <!-- Cluster Details -->
+                <div class="card">
+                    <h3>Detected Crime Clusters</h3>
+                    <div id="cluster-details" class="cluster-grid">
+                        <!-- Cluster cards will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Algorithm Info -->
+                <div class="card">
+                    <h3>Sliding Window Cluster Detection</h3>
+                    <div class="algorithm-info">
+                        <div class="algorithm-section">
+                            <h4>Algorithm Steps</h4>
+                            <ol>
+                                <li><strong>Data Preparation:</strong> Group crimes by date</li>
+                                <li><strong>Window Creation:</strong> Create 7-day sliding windows</li>
+                                <li><strong>Frequency Calculation:</strong> Count crimes per window</li>
+                                <li><strong>Threshold Detection:</strong> Identify above-average periods</li>
+                                <li><strong>Cluster Classification:</strong> Rank by activity level</li>
+                            </ol>
+                        </div>
+                        <div class="algorithm-section">
+                            <h4>Technical Details</h4>
+                            <ul>
+                                <li><strong>Time Complexity:</strong> O(n) where n = number of days</li>
+                                <li><strong>Space Complexity:</strong> O(n) for date storage</li>
+                                <li><strong>Window Size:</strong> Configurable (3, 7, 14 days)</li>
+                                <li><strong>Threshold:</strong> Above dataset average</li>
+                                <li><strong>Output:</strong> Ranked list of high-activity periods</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Page -->
+            <div id="search" class="page">
+                <div class="page-header">
+                    <h2>Crime Data Search</h2>
+                    <p>Search and filter crime records using various criteria</p>
+                </div>
+
+                <!-- Search Interface -->
+                <div class="card">
+                    <h3>Search Filters</h3>
+                    <div class="search-form">
+                        <div class="form-group">
+                            <label for="search-query">Search Query</label>
+                            <input type="text" id="search-query" placeholder="Search by crime type, location, or description...">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="crime-type-filter">Crime Type</label>
+                                <select id="crime-type-filter">
+                                    <option value="">All Crime Types</option>
+                                    <option value="theft">Theft</option>
+                                    <option value="burglary">Burglary</option>
+                                    <option value="vandalism">Vandalism</option>
+                                    <option value="assault">Assault</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="location-filter">Location</label>
+                                <input type="text" id="location-filter" placeholder="Filter by location...">
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="date-from">Date From</label>
+                                <input type="date" id="date-from">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="date-to">Date To</label>
+                                <input type="date" id="date-to">
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button id="search-btn" class="btn btn-primary">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                            <button id="clear-filters-btn" class="btn btn-secondary">
+                                <i class="fas fa-times"></i> Clear Filters
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Search Examples -->
+                <div class="card">
+                    <h3>Quick Search Examples</h3>
+                    <div class="quick-search">
+                        <button class="quick-search-btn" data-query="theft">Search "theft"</button>
+                        <button class="quick-search-btn" data-type="burglary">Burglary crimes</button>
+                        <button class="quick-search-btn" data-query="downtown">Downtown area</button>
+                    </div>
+                </div>
+
+                <!-- Search Results -->
+                <div class="card" id="search-results-card" style="display: none;">
+                    <h3>Search Results (<span id="results-count">0</span> records found)</h3>
+                    <div class="table-container">
+                        <table id="search-results-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date & Time</th>
+                                    <th>Crime Type</th>
+                                    <th>Location</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Search results will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- No Results -->
+                <div class="card" id="no-results" style="display: none;">
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <h3>No Results Found</h3>
+                        <p>Try adjusting your search criteria or clearing the filters.</p>
+                    </div>
+                </div>
+
+                <!-- Algorithm Info -->
+                <div class="card">
+                    <h3>Search Algorithm Implementation</h3>
+                    <div class="algorithm-info">
+                        <div class="algorithm-section">
+                            <h4>Linear Search Algorithm</h4>
+                            <ul>
+                                <li><strong>Time Complexity:</strong> O(n) for each search operation</li>
+                                <li><strong>Space Complexity:</strong> O(1) additional space</li>
+                                <li><strong>Search Types:</strong> Exact match and substring search</li>
+                                <li><strong>Filter Combination:</strong> Multiple criteria support</li>
+                            </ul>
+                        </div>
+                        <div class="algorithm-section">
+                            <h4>Search Features</h4>
+                            <ul>
+                                <li>Case-insensitive text matching</li>
+                                <li>Multi-field search capability</li>
+                                <li>Date range filtering</li>
+                                <li>Location-based filtering</li>
+                                <li>Crime type categorization</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Page -->
+            <div id="reports" class="page">
+                <div class="page-header">
+                    <h2>Crime Reports</h2>
+                    <p>Generate and download comprehensive crime analysis reports</p>
+                </div>
+
+                <!-- Report Generation -->
+                <div class="card">
+                    <h3>Generate New Report</h3>
+                    <div class="report-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="report-type">Report Type</label>
+                                <select id="report-type">
+                                    <option value="summary">Crime Summary</option>
+                                    <option value="trends">Trend Analysis</option>
+                                    <option value="hotspots">Hotspot Analysis</option>
+                                    <option value="detailed">Detailed Log</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="report-period">Date Range</label>
+                                <select id="report-period">
+                                    <option value="week">Last Week</option>
+                                    <option value="month">Last Month</option>
+                                    <option value="quarter">Last Quarter</option>
+                                    <option value="year">Last Year</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <button id="generate-report-btn" class="btn btn-primary">
+                                    <i class="fas fa-file-alt"></i> Generate Report
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Available Reports -->
+                <div class="card">
+                    <h3>Available Reports</h3>
+                    <div class="reports-grid">
+                        <div class="report-card">
+                            <div class="report-header">
+                                <i class="fas fa-chart-bar"></i>
+                                <div>
+                                    <h4>Crime Summary Report</h4>
+                                    <p>Comprehensive overview of all crime statistics</p>
+                                </div>
+                            </div>
+                            <div class="report-meta">
+                                <small>Last generated: 2024-02-15 10:30 AM</small>
+                            </div>
+                            <div class="report-actions">
+                                <button class="btn btn-sm btn-primary" onclick="generateReport('summary')">
+                                    <i class="fas fa-file-alt"></i> Generate
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="downloadReport('summary')">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="report-card">
+                            <div class="report-header">
+                                <i class="fas fa-trending-up"></i>
+                                <div>
+                                    <h4>Trend Analysis Report</h4>
+                                    <p>Time-based patterns and trending analysis</p>
+                                </div>
+                            </div>
+                            <div class="report-meta">
+                                <small>Last generated: 2024-02-15 09:15 AM</small>
+                            </div>
+                            <div class="report-actions">
+                                <button class="btn btn-sm btn-primary" onclick="generateReport('trends')">
+                                    <i class="fas fa-file-alt"></i> Generate
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="downloadReport('trends')">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="report-card">
+                            <div class="report-header">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h4>Hotspot Analysis Report</h4>
+                                    <p>Geographic crime distribution and hotspots</p>
+                                </div>
+                            </div>
+                            <div class="report-meta">
+                                <small>Last generated: 2024-02-14 04:45 PM</small>
+                            </div>
+                            <div class="report-actions">
+                                <button class="btn btn-sm btn-primary" onclick="generateReport('hotspots')">
+                                    <i class="fas fa-file-alt"></i> Generate
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="downloadReport('hotspots')">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="report-card">
+                            <div class="report-header">
+                                <i class="fas fa-file-text"></i>
+                                <div>
+                                    <h4>Detailed Crime Log</h4>
+                                    <p>Complete record of all crime incidents</p>
+                                </div>
+                            </div>
+                            <div class="report-meta">
+                                <small>Last generated: 2024-02-15 11:00 AM</small>
+                            </div>
+                            <div class="report-actions">
+                                <button class="btn btn-sm btn-primary" onclick="generateReport('detailed')">
+                                    <i class="fas fa-file-alt"></i> Generate
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="downloadReport('detailed')">
+                                    <i class="fas fa-download"></i> Download
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Preview -->
+                <div class="card" id="report-preview" style="display: none;">
+                    <div class="report-preview-header">
+                        <h3>Report Preview</h3>
+                        <button id="download-current-report" class="btn btn-success">
+                            <i class="fas fa-download"></i> Download Report
+                        </button>
+                    </div>
+                    <div id="report-content">
+                        <!-- Report content will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span>Data Structures & Algorithms: Hash Maps, Frequency Counting, Sliding Window, Linear Search</span>
+                </div>
+                <div class="footer-right">
+                    <span>Academic Project - 2nd Year CSE</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Processing...</p>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="dsa.js"></script>
+    <script src="charts.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
